@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<h2>مدیریت درخواست‌های عضویت</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-info">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>شماره همراه</th>
+      <th>معرف</th>
+      <th>کد دسترسی</th>
+      <th>تاریخ ثبت</th>
+      <th>تأیید شده؟</th>
+      <th>اقدامات</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for req in requests %}
+    <tr>
+      <td>{{ req.phone_number }}</td>
+      <td>{{ req.referrer_phone }}</td>
+      <td>{{ req.access_code }}</td>
+      <td>{{ req.created_at|date:"Y/m/d H:i" }}</td>
+      <td>{{ req.is_verified|yesno:"بله,خیر" }}</td>
+      <td>
+        <form method="post" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="request_id" value="{{ req.id }}">
+          <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">تأیید</button>
+          <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">حذف</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_content %}
+<h2>تکمیل عضویت</h2>
+
+<p><strong>شماره همراه شما:</strong> {{ phone_number }}</p>
+<p><strong>شماره همراه معرف:</strong> {{ referrer_phone }}</p>
+
+{% if form.errors %}
+  <div class="alert alert-danger">
+    <strong>لطفاً خطاهای زیر را بررسی کنید:</strong>
+    <ul>
+      {% for field, errors in form.errors.items %}
+        <li>{{ field }}: {{ errors }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        {{ form.national_code.label_tag }} {{ form.national_code }}
+    </div>
+    <div class="mb-3">
+        {{ form.username.label_tag }} {{ form.username }}
+    </div>
+    <div class="mb-3">
+        {{ form.password.label_tag }} {{ form.password }}
+    </div>
+    <div class="mb-3">
+        {{ form.birth_date.label_tag }} {{ form.birth_date }}
+    </div>
+    <button type="submit" class="btn btn-success">ثبت نهایی</button>
+</form>
+{% endblock %}

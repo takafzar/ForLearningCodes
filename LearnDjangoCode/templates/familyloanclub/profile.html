@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load convert_numbers %}
+
+{% block main_content %}
+<h2>پروفایل من</h2>
+
+{% if mode == 'view' %}
+  <p><strong>نام کاربری:</strong> {{ request.user.username }}</p>
+  <p><strong>نام کامل:</strong> {{ request.user.get_full_name }}</p>
+  <p><strong>کد ملی:</strong> {{ profile.national_code|persian }}</p>
+  <p><strong>شماره همراه:</strong> {{ profile.mobile_number|persian }}</p>
+  <p><strong>نام معرف:</strong> {{ profile.referrer_name }}</p>
+  <p><strong>تاریخ تولد:</strong> {{ profile.birth_date|persian }}</p>
+  <a class="btn btn-primary mt-3" href="?mode=edit">ویرایش اطلاعات</a>
+{% elif mode == 'edit' %}
+  <form method="post">
+    {% csrf_token %}
+    <h4>ویرایش اطلاعات:</h4>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
+  </form>
+
+  <hr>
+
+  <form method="post">
+    {% csrf_token %}
+    <h4>تغییر رمز عبور:</h4>
+    {{ password_form.as_p }}
+    <button type="submit" class="btn btn-warning">تغییر رمز</button>
+  </form>
+{% endif %}
+
+{% endblock %}

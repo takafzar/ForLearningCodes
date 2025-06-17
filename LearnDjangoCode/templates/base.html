@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>باشگاه وام خانوادگی</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-3">
+        <h1>باشگاه وام خانوادگی</h1>
+        <p>ارائه خدمات قرض‌الحسنه و دسترسی آسان به امکانات</p>
+    </header>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">خانه</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">ورود</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'request_access' %}">عضویت</a></li>
+                </ul>
+                <span class="navbar-text text-white">
+                {% if user.is_authenticated %}
+                    {{ user.get_full_name|default:user.username }}
+                {% else %}
+                    شما وارد حساب خود نشده‌اید. لطفاً <a href="{% url 'login' %}" class="text-warning">وارد شوید</a>.
+                {% endif %}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="container mt-3">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info">{{ message|safe }}</div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            {% if user.is_authenticated and user_links %}
+            <aside class="col-md-3 order-md-1">
+                {% block right_sidebar %}
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">دسترسی‌های من</div>
+                        <ul class="list-group list-group-flush">
+                            {% for link in user_links %}
+                            <li class="list-group-item">
+                                {% if link.url == '#' %}
+                                <span>{{ link.name }}</span>
+                                {% else %}
+                                <a href="{% url link.url %}">{{ link.name }}</a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                </div>
+                {% endblock %}
+            </aside>
+            {% endif %}
+            <!-- Main Content -->
+            <main class="col-md-6 order-md-2">
+                {% block main_content %}{% endblock %}
+            </main>
+
+            <!-- Left Sidebar -->
+            <aside class="col-md-3 order-md-3">
+                {% block left_sidebar %}{% endblock %}
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        &copy; 2025 Family Loan Club. تمامی حقوق محفوظ است.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% if user.is_authenticated and session_expiry %}
+    <script>
+        const sessionAge = {{ session_expiry }};
+        setTimeout(function() {
+            window.location.href = "{% url 'logout' %}";
+        }, sessionAge * 1000);
+    </script>
+    {% endif %}
+</body>
+</html>
+
+
+
+

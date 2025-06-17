@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="container">
+  <h2>ثبت‌نام کاربر جدید (مدیر)</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">ثبت کاربر</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="container">
+  <h2>تأیید کد دسترسی</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-warning">{{ message|safe }}</div>
+    {% endfor %}
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-info">تأیید</button>
+  </form>
+</div>
+{% endblock %}
